@@ -1,0 +1,32 @@
+generated: '2026-08-02'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.blueorigin.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 19 23:59:59 2026 GMT
+  hsts: null
+- host: shop.blueorigin.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 19 02:24:34 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: payloads.blueorigin.com
+  https: true
+  tls_cert_error: '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get
+    local issuer certificate (_ssl.c:1082)'
+  hsts: null
+domains:
+- domain: blueorigin.com
+  dnssec: false
+  caa:
+  - 0 issue "sectigo.com"
+  - 0 issuewild "letsencrypt.org"
+  - 0 issuewild "sectigo.com"
+  - 0 issue "digicert.com; cansignhttpexchanges=yes"
+  - 0 issue "letsencrypt.org"
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

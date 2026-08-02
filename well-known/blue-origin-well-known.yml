@@ -1,0 +1,216 @@
+generated: '2026-08-02'
+method: searched
+source: live probes of /.well-known/* and agent-discovery paths on every Blue Origin host
+notes: >-
+  Blue Origin's corporate site (blueorigin.com / www.blueorigin.com) is hosted on Vercel
+  behind a "Vercel Security Checkpoint" that answers HTTP 429 to every non-browser
+  request — including /robots.txt — so no /.well-known/ path on the corporate host could
+  be evaluated. Those rows are recorded as blocked-429, NOT as 404, so a later round does
+  not mistake a bot wall for an absence. The real documents all live on two vendor-hosted
+  surfaces bound to blueorigin.com hosts: the Shopify storefront (shop.blueorigin.com),
+  which serves an llms.txt, an agents.md, a UCP merchant profile, OIDC/OAuth 2.0
+  authorization-server metadata and RFC 9728 protected-resource metadata; and the two
+  Salesforce Experience Cloud portals (payloads, bodp), which serve OIDC discovery. No
+  RFC 9116 security.txt and no A2A agent card was found on any Blue Origin host.
+hosts:
+- host: https://www.blueorigin.com
+  platform: Vercel
+  documents:
+  - path: /.well-known/security.txt
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/openid-configuration
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/oauth-authorization-server
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/oauth-protected-resource
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/api-catalog
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/ai-plugin.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/agent-card.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/agent.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /llms.txt
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /openapi.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /swagger.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /api-docs
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /robots.txt
+    status: 429
+    result: blocked-vercel-checkpoint
+- host: https://blueorigin.com
+  platform: Vercel
+  documents:
+  - path: /.well-known/security.txt
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/agent-card.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /.well-known/agent.json
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /llms.txt
+    status: 429
+    result: blocked-vercel-checkpoint
+  - path: /openapi.json
+    status: 429
+    result: blocked-vercel-checkpoint
+- host: https://shop.blueorigin.com
+  platform: Shopify
+  documents:
+  - path: /llms.txt
+    status: 200
+    content_type: text/markdown
+    file: ../llms/blue-origin-shop-llms.txt
+  - path: /agents.md
+    status: 200
+    content_type: text/markdown
+    file: ../llms/blue-origin-shop-agents.md
+  - path: /.well-known/ucp
+    status: 200
+    content_type: application/json
+    file: blue-origin-shop-ucp.json
+    note: Universal Commerce Protocol merchant profile, version 2026-04-08
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: blue-origin-shop-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: application/json
+    file: blue-origin-shop-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    content_type: application/json
+    file: blue-origin-shop-oauth-protected-resource.json
+    note: RFC 9728 protected-resource metadata
+  - path: /sitemap_agentic_discovery.xml
+    status: 200
+    content_type: application/xml
+    note: sitemap whose only entry is /agents.md
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /openapi.json
+    status: 404
+  - path: /swagger.json
+    status: 404
+- host: https://payloads.blueorigin.com
+  platform: Salesforce Experience Cloud
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: blue-origin-payloads-openid-configuration.json
+  - path: /services/data
+    status: 200
+    content_type: application/json
+    note: Salesforce REST API version list, v31.0 through v67.0 (37 versions)
+  - path: /id/keys
+    status: 200
+    content_type: application/json
+    note: JWKS — not stored, key material rotates
+  - path: /robots.txt
+    status: 200
+    note: default Salesforce communities robots.txt
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+  - path: /.well-known/oauth-protected-resource
+    status: 401
+  - path: /.well-known/api-catalog
+    status: 401
+  - path: /.well-known/ai-plugin.json
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+  - path: /llms.txt
+    status: 401
+  - path: /openapi.json
+    status: 401
+  - path: /swagger.json
+    status: 401
+- host: https://bodp.blueorigin.com
+  platform: Salesforce Experience Cloud
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: application/json
+    file: blue-origin-bodp-openid-configuration.json
+  - path: /services/data
+    status: 200
+    content_type: application/json
+    note: Salesforce REST API version list, v31.0 through v67.0
+  - path: /id/keys
+    status: 200
+    content_type: application/json
+    note: JWKS — not stored, key material rotates
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401
+  - path: /.well-known/agent.json
+    status: 401
+  - path: /llms.txt
+    status: 401
+  - path: /openapi.json
+    status: 401
+- host: https://supplierportal.blueorigin.com
+  platform: AWS GovCloud (us-gov-west-1)
+  documents:
+  - path: /
+    status: 200
+    note: 'HTML login page titled "Supplier Onboard Portal"'
+  - path: /robots.txt
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+  - path: /openapi.json
+    status: 404
+- host: https://suppliers.blueorigin.com
+  documents:
+  - path: /
+    status: nxdomain
+    note: hostname referenced in search results but does not resolve in DNS
+x-evidence:
+  fetched: '2026-08-02'
+  hosts_probed: 7
+  real_documents: 8
+  security_txt_found: false
+  agent_card_found: false

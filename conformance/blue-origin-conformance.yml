@@ -1,0 +1,103 @@
+generated: '2026-08-02'
+method: probed
+source: live discovery-document and endpoint probes across every Blue Origin host
+note: >-
+  Nothing here is derived from an OpenAPI — Blue Origin publishes none. Each assertion
+  is grounded in a document a blueorigin.com host actually served, and every conformance
+  claim below is really a property of the vendor platform (Shopify or Salesforce
+  Experience Cloud) that Blue Origin has deployed, not of software Blue Origin wrote.
+  Blue Origin itself publishes no compliance program, no certifications page and no
+  trust center, so no Compliance pointer is emitted.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    RFC 6749 authorization-code flow advertised by three discovery documents —
+    shop.blueorigin.com (Shopify), payloads.blueorigin.com and bodp.blueorigin.com
+    (Salesforce).
+- id: oidc-discovery
+  conforms: true
+  evidence: >-
+    /.well-known/openid-configuration returns 200 application/json on
+    shop.blueorigin.com, payloads.blueorigin.com and bodp.blueorigin.com.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: partial
+  evidence: >-
+    /.well-known/oauth-authorization-server returns 200 on shop.blueorigin.com only;
+    both Salesforce portals return 401 for that path while serving OIDC discovery.
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: true
+  evidence: >-
+    shop.blueorigin.com/.well-known/oauth-protected-resource returns
+    {"resource":"https://shop.blueorigin.com","authorization_servers":[...],"bearer_methods_supported":["header"]}.
+- id: rfc7636-pkce
+  conforms: partial
+  evidence: >-
+    code_challenge_methods_supported ["S256"] on the Shopify authorization server; the
+    Salesforce discovery documents do not advertise PKCE support.
+- id: model-context-protocol
+  conforms: true
+  evidence: >-
+    JSON-RPC 2.0 tools/list on https://shop.blueorigin.com/api/mcp returned HTTP 200
+    with five tools carrying JSON Schema draft 2020-12 inputSchema.
+- id: ucp-universal-commerce-protocol
+  conforms: true
+  version: '2026-04-08'
+  evidence: >-
+    /.well-known/ucp returns a merchant profile declaring versions 2026-04-08 and
+    2026-01-23, the dev.ucp.shopping.* capability set and three payment handlers.
+- id: llms-txt
+  conforms: true
+  evidence: >-
+    https://shop.blueorigin.com/llms.txt returns 200 text/markdown; the same content is
+    mirrored at /agents.md and indexed by /sitemap_agentic_discovery.xml.
+- id: json-schema-2020-12
+  conforms: true
+  evidence: 'every MCP tool inputSchema declares $schema https://json-schema.org/draft/2020-12/schema'
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document found. /openapi.json, /swagger.json and /api-docs
+    were probed on www.blueorigin.com (429 Vercel checkpoint), shop.blueorigin.com (404),
+    payloads.blueorigin.com (401), bodp.blueorigin.com (401) and
+    supplierportal.blueorigin.com (404).
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming or webhook surface is published on any Blue Origin host
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json probed on all seven hosts —
+    429 on the Vercel corporate site, 404 on shop and supplierportal, 401 on both
+    Salesforce portals. No card exists to grade.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    no /.well-known/security.txt served by any Blue Origin host (404 on shop and
+    supplierportal, 401 on both portals, 429 on the corporate site)
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    observed errors use JSON-RPC 2.0 error objects (MCP/UCP) and Salesforce
+    Missing_OAuth_Token strings, not application/problem+json
+- id: dnssec
+  conforms: false
+  evidence: 'security/blue-origin-domain-security.yml: blueorigin.com dnssec false'
+- id: caa
+  conforms: true
+  evidence: >-
+    blueorigin.com publishes five CAA records (sectigo.com, letsencrypt.org,
+    digicert.com with cansignhttpexchanges=yes, plus issuewild)
+- id: dmarc
+  conforms: true
+  evidence: 'blueorigin.com DMARC present with policy p=reject; SPF present'
+- id: hsts
+  conforms: partial
+  evidence: >-
+    shop.blueorigin.com sets HSTS max-age 31536000; www.blueorigin.com returned no HSTS
+    header on the probed response
+x-evidence:
+  fetched: '2026-08-02'
+  hosts_probed: 7
+  compliance_program_published: false
+  trust_center_found: false

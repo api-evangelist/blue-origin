@@ -1,0 +1,91 @@
+generated: '2026-08-02'
+method: probed
+source: HTTP responses observed while probing Blue Origin hosts on 2026-08-02
+format: mixed
+note: >-
+  Blue Origin publishes no error reference and no OpenAPI, so nothing here is derived
+  from a spec — every entry is an error a Blue Origin host actually returned during
+  contract discovery. Two envelopes are in play: JSON-RPC 2.0 error objects on the
+  Shopify MCP/UCP endpoints, and Salesforce platform error strings on the customer and
+  data portals. Neither uses RFC 9457 application/problem+json.
+envelopes:
+- id: jsonrpc
+  media_type: application/json
+  shape: '{"jsonrpc":"2.0","id":<id>,"error":{"code":<int>,"message":<string>,"data":{...}}}'
+  surfaces: [https://shop.blueorigin.com/api/ucp/mcp, https://shop.blueorigin.com/api/mcp]
+- id: salesforce-platform
+  media_type: text/plain
+  shape: '<ERROR_CODE> — e.g. Missing_OAuth_Token'
+  surfaces: [https://payloads.blueorigin.com, https://bodp.blueorigin.com]
+- id: vercel-checkpoint
+  media_type: text/html
+  shape: HTML interstitial titled "Vercel Security Checkpoint"
+  surfaces: [https://www.blueorigin.com, https://blueorigin.com]
+problems:
+- id: ucp-invalid-profile-url
+  status: 422
+  envelope: jsonrpc
+  code: -32001
+  title: UCP discovery failed
+  data_code: invalid_profile_url
+  detail: 'Unable to fetch agent profile: Missing profile uri'
+  remediation: >-
+    Supply meta.ucp-agent.profile as a resolvable agent-profile URI on the UCP MCP
+    request, or use the non-UCP MCP endpoint at /api/mcp, which answers anonymously.
+  observed_at: https://shop.blueorigin.com/api/ucp/mcp
+- id: rate-limited-mcp
+  status: 429
+  envelope: jsonrpc
+  title: Rate limited
+  detail: The MCP endpoint is rate limited per IP.
+  remediation: Back off and retry with exponential delay (documented in llms.txt).
+  source: https://shop.blueorigin.com/llms.txt
+- id: missing-oauth-token
+  status: 403
+  envelope: salesforce-platform
+  code: Missing_OAuth_Token
+  title: Missing OAuth token
+  detail: An OAuth bearer token is required for this Salesforce portal resource.
+  remediation: >-
+    Complete the authorization-code flow at
+    https://payloads.blueorigin.com/services/oauth2/authorize and present the bearer
+    token; access is limited to provisioned Blue Origin portal users.
+  observed_at: https://payloads.blueorigin.com/services/oauth2/userinfo
+- id: portal-unauthorized
+  status: 401
+  envelope: salesforce-platform
+  title: Unauthorized
+  detail: >-
+    The Experience Cloud community returns 401 for every path outside its anonymous
+    discovery surface, including /.well-known/security.txt, /llms.txt and /openapi.json.
+  remediation: Authenticate as a provisioned portal user.
+  observed_at: [https://payloads.blueorigin.com/openapi.json, https://bodp.blueorigin.com/openapi.json]
+- id: portal-not-found
+  status: 404
+  envelope: salesforce-platform
+  title: Not found
+  detail: Path not routed by the Experience Cloud community.
+  observed_at: https://payloads.blueorigin.com/api-docs
+- id: corporate-site-bot-wall
+  status: 429
+  envelope: vercel-checkpoint
+  title: Vercel Security Checkpoint
+  detail: >-
+    www.blueorigin.com and blueorigin.com return HTTP 429 with an HTML challenge page to
+    every non-browser request, including /robots.txt. This is a bot wall, not a rate
+    limit an agent can back off from — no Retry-After was observed and repeated,
+    well-spaced requests with full browser header sets were also refused.
+  remediation: >-
+    None available to an automated client. The corporate site is unreadable by agents;
+    machine-readable Blue Origin content must be taken from shop.blueorigin.com.
+  observed_at: [https://www.blueorigin.com/robots.txt, https://www.blueorigin.com/llms.txt]
+- id: storefront-not-found
+  status: 404
+  envelope: null
+  title: Not found
+  detail: 'Shopify storefront 404 for unrouted paths, e.g. /openapi.json, /.well-known/security.txt'
+  observed_at: https://shop.blueorigin.com/openapi.json
+x-evidence:
+  fetched: '2026-08-02'
+  responses_observed: 7
+  rfc9457: false

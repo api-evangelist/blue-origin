@@ -1,18 +1,125 @@
 aid: blue-origin
 name: Blue Origin
-description: 'Blue Origin is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'Blue Origin is an American private aerospace manufacturer and spaceflight
+  services company founded in 2000 by Jeff Bezos and headquartered in Kent, Washington.
+  It builds and flies the reusable New Shepard suborbital vehicle, the heavy-lift New
+  Glenn orbital launch vehicle, the BE-3 and BE-4 rocket engines, the Blue Moon lunar
+  lander and the Blue Ring orbital transfer vehicle, and it owns Honeybee Robotics.
+  Blue Origin publishes no public developer portal, no API documentation and no machine-readable
+  API description for any of its space products; customer, payload and supplier relationships
+  run through authenticated portals — payloads.blueorigin.com and bodp.blueorigin.com
+  on Salesforce Experience Cloud, and supplierportal.blueorigin.com on AWS GovCloud.
+  The only genuinely agent-addressable surface on a blueorigin.com host is the Blue
+  Origin Shop, a Shopify storefront that publishes a real llms.txt and agents.md, a
+  Universal Commerce Protocol (UCP) merchant profile, RFC 9728 protected-resource metadata,
+  and an anonymous MCP server at /api/mcp exposing five tools. The corporate site itself
+  sits behind a Vercel Security Checkpoint that answers HTTP 429 to every non-browser
+  request, including /robots.txt.'
+image: https://shop.blueorigin.com/cdn/shop/files/shoplogo_28118316-c90f-44eb-b740-03b5c523988d.png?v=1645467696
 url: https://raw.githubusercontent.com/api-evangelist/blue-origin/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
 - Company
-apis: []
+- Aerospace
+- Space
+- Spaceflight
+- Launch Services
+- Satellites
+- Rocket Engines
+- Defense
+- Manufacturing
+- E-commerce
+- MCP
+apis:
+- name: Blue Origin Shop MCP Server
+  description: 'The Blue Origin Shop storefront exposes an anonymous Model Context Protocol
+    endpoint at https://shop.blueorigin.com/api/mcp. A live tools/list returned five
+    tools with full JSON Schema draft 2020-12 input schemas: search_catalog, get_product_details,
+    get_cart, update_cart and search_shop_policies_and_faqs. Responses conform to Universal
+    Commerce Protocol capabilities (dev.ucp.shopping.catalog.search, .catalog.lookup,
+    .cart, .checkout, .fulfillment, .discount, .order). This is Shopify''s agentic commerce
+    surface bound to Blue Origin''s store — it is not a Blue Origin space or launch
+    API. Checkout requires contemporaneous buyer approval; the endpoint is rate limited
+    per IP.'
+  humanURL: https://shop.blueorigin.com/agents.md
+  baseURL: https://shop.blueorigin.com/api/mcp
+  tags:
+  - MCP
+  - Commerce
+  - Catalog
+  - Cart
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/blue-origin-mcp.yml
+  - type: LLMsTxt
+    url: llms/blue-origin-shop-llms.txt
+  - type: x-evidence
+    url: https://shop.blueorigin.com/api/mcp
+- name: Blue Origin Shop Storefront JSON
+  description: 'The read-only JSON surface of the Blue Origin Shop Shopify storefront,
+    documented by the store''s own llms.txt/agents.md: GET /products.json and GET /collections/{handle}/products.json
+    return the product catalogue, GET /products/{handle}.json returns a single product,
+    and GET /search?q={query}&type=product runs storefront search. No authentication
+    is required for these reads and no OpenAPI description is published for them. A
+    UCP merchant profile is served at /.well-known/ucp and an agentic-discovery sitemap
+    at /sitemap_agentic_discovery.xml.'
+  humanURL: https://shop.blueorigin.com/collections/all
+  baseURL: https://shop.blueorigin.com
+  tags:
+  - Commerce
+  - Catalog
+  - Products
+  - JSON
+  properties:
+  - type: WellKnown
+    url: well-known/blue-origin-well-known.yml
+  - type: x-evidence
+    url: https://shop.blueorigin.com/products.json
+- name: Blue Origin Customer Portal (Payloads) Platform API
+  description: 'payloads.blueorigin.com is Blue Origin''s customer portal for payload
+    customers, running on Salesforce Experience Cloud. Blue Origin publishes no documentation
+    or machine-readable description for it, but the host answers anonymously on the
+    Salesforce platform discovery surface: /services/data lists 37 REST API versions
+    (v31.0 through v67.0, Summer ''26), /.well-known/openid-configuration returns full
+    OIDC discovery metadata, and /id/keys serves the JWKS. Every business resource is
+    OAuth-gated — an unauthenticated call to /services/oauth2/userinfo returns 403 Missing_OAuth_Token
+    and /openapi.json returns 401.'
+  humanURL: https://payloads.blueorigin.com/
+  baseURL: https://payloads.blueorigin.com/services/data/v67.0
+  tags:
+  - Payloads
+  - Customer Portal
+  - Salesforce
+  - OAuth
+  properties:
+  - type: OpenIDConnect
+    url: well-known/blue-origin-payloads-openid-configuration.json
+  - type: x-evidence
+    url: https://payloads.blueorigin.com/services/data
+- name: Blue Origin Data Portal (BODP) Platform API
+  description: 'bodp.blueorigin.com is the Blue Origin Data Portal, a second Salesforce
+    Experience Cloud community on the same Salesforce org as the payloads customer portal.
+    Like that portal it publishes no documentation and no machine-readable API description,
+    while answering anonymously on the Salesforce platform discovery surface: /services/data
+    lists REST API versions v31.0 through v67.0, /.well-known/openid-configuration returns
+    OIDC discovery metadata, and /id/keys serves the JWKS. All data access is OAuth-gated
+    behind a login wall.'
+  humanURL: https://bodp.blueorigin.com/
+  baseURL: https://bodp.blueorigin.com/services/data/v67.0
+  tags:
+  - Data Portal
+  - Salesforce
+  - OAuth
+  properties:
+  - type: OpenIDConnect
+    url: well-known/blue-origin-bodp-openid-configuration.json
+  - type: x-evidence
+    url: https://bodp.blueorigin.com/services/data
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +127,51 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
+  url: https://www.blueorigin.com/
+- type: SecondaryMarket
   url: https://www.hiive.com/securities/blue-origin-stock
+- type: GitHubOrganization
+  url: https://github.com/BlueOrigin
+- type: Blog
+  url: https://www.blueorigin.com/news
+- type: Careers
+  url: https://www.blueorigin.com/careers
+- type: TermsOfService
+  url: https://www.blueorigin.com/terms-of-use
+- type: PrivacyPolicy
+  url: https://www.blueorigin.com/privacy-policy
+- type: SignUp
+  url: https://shop.blueorigin.com/account/register
+- type: MCPServer
+  url: mcp/blue-origin-mcp.yml
+- type: LLMsTxt
+  name: Blue Origin Shop llms.txt (verbatim)
+  url: llms/blue-origin-shop-llms.txt
+- type: LLMsTxt
+  name: Blue Origin network llms.txt (generated)
+  url: llms/blue-origin-llms.txt
+- type: WellKnown
+  url: well-known/blue-origin-well-known.yml
+- type: OpenIDConnect
+  url: well-known/blue-origin-shop-openid-configuration.json
+- type: Authentication
+  url: authentication/blue-origin-authentication.yml
+- type: OAuthScopes
+  url: scopes/blue-origin-scopes.yml
+- type: Conventions
+  url: conventions/blue-origin-conventions.yml
+- type: ErrorCatalog
+  url: errors/blue-origin-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/blue-origin-lifecycle.yml
+- type: Conformance
+  url: conformance/blue-origin-conformance.yml
+- type: DomainSecurity
+  url: security/blue-origin-domain-security.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-08-02'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1

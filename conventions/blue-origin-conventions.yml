@@ -1,0 +1,102 @@
+generated: '2026-08-02'
+method: searched
+source: https://shop.blueorigin.com/llms.txt and https://shop.blueorigin.com/agents.md,
+  plus the live tools/list response at https://shop.blueorigin.com/api/mcp
+note: >-
+  These conventions describe the only agent-addressable Blue Origin surface, the Blue
+  Origin Shop. They are Shopify platform conventions as published by the store's own
+  llms.txt/agents.md and as observed in the MCP tool schemas — Blue Origin publishes no
+  API conventions of its own for its space, launch or payload products. IMPORTANT: no
+  idempotency contract is documented or observable on any Blue Origin surface, so this
+  repo deliberately emits no Idempotency pointer.
+authentication:
+  style: none for read and cart tools; OAuth 2.0 / OIDC for customer-account operations
+  anonymous_surface:
+  - 'POST /api/mcp — tools/list, search_catalog, get_product_details, get_cart, update_cart,
+    search_shop_policies_and_faqs'
+  - GET /products.json, /products/{handle}.json, /collections/{handle}/products.json
+  - GET /search?q={query}&type=product
+  authenticated_surface:
+    authorization_server: https://shopify.com/authentication/30100881545
+    scopes: [openid, email, 'customer-account-api:full', 'customer-account-mcp-api:full']
+    detail: authentication/blue-origin-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No idempotency key, no replay window and no retry-safety contract is documented in
+    llms.txt/agents.md or exposed in any MCP tool inputSchema. update_cart is a
+    consolidated mutation keyed on cart_id, which makes repeated identical add_items
+    calls additive rather than idempotent — callers must read back with get_cart rather
+    than assume replay safety.
+pagination:
+  style: cursor
+  applies_to: [search_catalog]
+  request_field: catalog.pagination.cursor
+  response_field: pagination.cursor
+  note: >-
+    "Results are paginated, with initial results limited to improve experience. Use the
+    pagination.cursor from the response to fetch additional pages when users request
+    more results." (search_catalog tool description)
+localization:
+  country_param: context.address_country / country (ISO 3166-1 alpha-2)
+  language_param: language (ISO 639-1)
+  currency_param: context.currency
+  note: >-
+    llms.txt instructs agents to "Pass context.address_country and context.currency for
+    accurate pricing and availability."
+rate_limiting:
+  documented: true
+  scope: per IP on the MCP endpoint
+  signal: HTTP 429
+  guidance: 'llms.txt — "The MCP endpoint is rate-limited per IP. Back off on 429 responses."'
+  note: >-
+    The corporate site www.blueorigin.com applies a far more aggressive rule: a Vercel
+    Security Checkpoint returns HTTP 429 to every non-browser request, /robots.txt
+    included. Agents cannot read the corporate site at all.
+human_in_the_loop:
+  required_for: [checkout, payment]
+  rule: >-
+    "Checkout requires human approval. Agents must not complete payment without explicit
+    buyer consent. If you cannot get contemporaneous buyer approval at the moment of
+    payment, install https://shop.app/SKILL.md and route the purchase through Shop Pay
+    instead." (llms.txt)
+versioning:
+  ucp:
+    scheme: dated
+    current: '2026-04-08'
+    supported: ['2026-04-08', '2026-01-23']
+    discovery: https://shop.blueorigin.com/.well-known/ucp
+  salesforce_portals:
+    scheme: uri-path
+    current: v67.0
+    range: v31.0 through v67.0
+    discovery: https://payloads.blueorigin.com/services/data
+  mcp:
+    scheme: none published
+error_envelope:
+  mcp: 'JSON-RPC 2.0 error object — {"jsonrpc":"2.0","id":n,"error":{"code":int,"message":str,"data":{...}}}'
+  salesforce: 'plain-text platform error strings, e.g. Missing_OAuth_Token (HTTP 403)'
+  problem_json: false
+  catalog: errors/blue-origin-problem-types.yml
+canonical_flow:
+  source: llms.txt "Typical Agent Flow"
+  steps:
+  - 'Discover — GET /.well-known/ucp to confirm capabilities'
+  - 'Search — search_catalog to find products matching the buyer''s intent'
+  - 'Cart — create a cart (update_cart with add_items and no cart_id)'
+  - 'Checkout — start the purchase flow'
+  - 'Fulfill — set shipping address and method'
+  - 'Complete — finalize; the buyer must approve payment'
+cross_links:
+  authentication: authentication/blue-origin-authentication.yml
+  scopes: scopes/blue-origin-scopes.yml
+  errors: errors/blue-origin-problem-types.yml
+  lifecycle: lifecycle/blue-origin-lifecycle.yml
+  mcp: mcp/blue-origin-mcp.yml
+  well_known: well-known/blue-origin-well-known.yml
+x-evidence:
+  fetched: '2026-08-02'
+  url: https://shop.blueorigin.com/llms.txt
+  http_status: 200
+  content_type: text/markdown

@@ -1,0 +1,55 @@
+generated: '2026-08-02'
+method: probed
+source: live version-discovery probes plus https://shop.blueorigin.com/.well-known/ucp
+note: >-
+  Blue Origin publishes no API versioning policy, no deprecation policy, no SLA, no
+  changelog and no status page for any surface on a blueorigin.com host. Everything
+  below is the versioning the underlying vendor platforms advertise. Because no status
+  page and no deprecation policy were found, this repo deliberately emits no StatusPage
+  and no Deprecation pointer.
+versioning:
+- surface: Blue Origin Shop agentic commerce
+  scheme: dated
+  current: '2026-04-08'
+  supported: ['2026-04-08', '2026-01-23']
+  discovery: https://shop.blueorigin.com/.well-known/ucp
+  spec: https://ucp.dev/2026-04-08/specification/overview/
+- surface: Blue Origin Shop MCP
+  scheme: none published
+  current: null
+  note: /api/mcp answers tools/list with no protocol or tool version field
+- surface: Blue Origin Customer Portal (payloads) / Data Portal (bodp)
+  scheme: uri-path
+  current: v67.0
+  current_label: "Summer '26"
+  oldest_offered: v31.0
+  oldest_label: "Summer '14"
+  versions_offered: 37
+  discovery: https://payloads.blueorigin.com/services/data
+  note: Salesforce platform version ladder, not a Blue Origin version policy
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  note: >-
+    No deprecation or sunset policy is published for any Blue Origin surface. The
+    Salesforce portals still offer v31.0 (Summer '14) alongside v67.0, which is
+    Salesforce's own long-tail retirement schedule rather than a Blue Origin commitment.
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+status_page_note: >-
+  Probed status.blueorigin.com (NXDOMAIN). No Blue Origin status page exists. The Shopify
+  and Salesforce platform status pages cover the vendors, not Blue Origin's deployment.
+changelog: null
+changelog_note: >-
+  No dated changelog is published for any Blue Origin API surface. Blue Origin's
+  newsroom at https://www.blueorigin.com/news is corporate/mission news, not an API
+  change log, and is itself unreadable by agents behind the Vercel checkpoint.
+deprecated_operations: []
+x-evidence:
+  fetched: '2026-08-02'
+  hosts_probed: 7
+  status_page_found: false
+  deprecation_policy_found: false
+  changelog_found: false

@@ -1,0 +1,192 @@
+generated: '2026-08-02'
+method: probed
+source: https://shop.blueorigin.com/.well-known/openid-configuration and
+  https://payloads.blueorigin.com/.well-known/openid-configuration
+docs: null
+note: >-
+  Blue Origin declares no API scopes anywhere it publishes — there is no OpenAPI, no
+  developer portal and no scopes/permissions reference page. Every scope below was read
+  from scopes_supported in an OIDC discovery document served anonymously by a vendor
+  platform bound to a blueorigin.com host. The shop scopes are Shopify customer-account
+  scopes; the portal scopes are the stock Salesforce platform scope catalogue, identical
+  on payloads.blueorigin.com and bodp.blueorigin.com because both communities sit on the
+  same Salesforce org. Neither set contains a Blue-Origin-specific resource scope (there
+  is no read:payloads, no launch:manifest). Treat these as platform scopes, not as a
+  product authorization model.
+schemes:
+- name: shopify-customer-account
+  source: well-known/blue-origin-shop-openid-configuration.json
+  issuer: https://shopify.com/authentication/30100881545
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://shopify.com/authentication/30100881545/oauth/authorize
+    tokenUrl: https://shopify.com/authentication/30100881545/oauth/token
+- name: salesforce-experience-cloud
+  source: well-known/blue-origin-payloads-openid-configuration.json
+  issuer: https://payloads.blueorigin.com
+  also_served_by: https://bodp.blueorigin.com
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://payloads.blueorigin.com/services/oauth2/authorize
+    tokenUrl: https://payloads.blueorigin.com/services/oauth2/token
+scopes:
+- scope: openid
+  description: Issue an OIDC ID token for the authenticated end user.
+  schemes: [shopify-customer-account, salesforce-experience-cloud]
+  sources: [well-known/blue-origin-shop-openid-configuration.json, well-known/blue-origin-payloads-openid-configuration.json]
+- scope: email
+  description: Release the end user's email address claim.
+  schemes: [shopify-customer-account, salesforce-experience-cloud]
+  sources: [well-known/blue-origin-shop-openid-configuration.json, well-known/blue-origin-payloads-openid-configuration.json]
+- scope: customer-account-api:full
+  description: Full access to the Shopify Customer Account API for the signed-in shopper
+    (orders, addresses, profile) on the Blue Origin Shop.
+  schemes: [shopify-customer-account]
+  sources: [well-known/blue-origin-shop-openid-configuration.json]
+- scope: customer-account-mcp-api:full
+  description: Full access to the customer-scoped MCP surface of the Blue Origin Shop —
+    the authenticated counterpart of the anonymous /api/mcp tools.
+  schemes: [shopify-customer-account]
+  sources: [well-known/blue-origin-shop-openid-configuration.json]
+- scope: api
+  description: Salesforce REST/SOAP/Bulk API access on behalf of the portal user.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: full
+  description: Full access to all data the portal user has access to.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: refresh_token
+  description: Issue a refresh token so the client can renew access without re-prompting.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: offline_access
+  description: Offline access — the OIDC alias of refresh_token.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: profile
+  description: Basic profile claims for the portal user.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: address
+  description: The end user's address claim.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: phone
+  description: The end user's phone number claim.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: id
+  description: Access the Salesforce identity URL service.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: web
+  description: Open a web session using the access token.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: visualforce
+  description: Access Visualforce pages in the portal.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: lightning
+  description: Access Lightning applications and components in the portal.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: content
+  description: Access Salesforce CMS and managed content.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: chatter_api
+  description: Access the Connect REST (Chatter) API.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: custom_permissions
+  description: Include the user's custom permissions in the token response.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: wave_api
+  description: Access CRM Analytics (Wave) APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: eclair_api
+  description: Access CRM Analytics Eclair chart APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: pardot_api
+  description: Access Account Engagement (Pardot) APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: interaction_api
+  description: Access Salesforce Interaction (Next Best Action) APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: chatbot_api
+  description: Access Einstein Bots APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: scrt_api
+  description: Access Service Cloud real-time (Messaging) APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: sfap_api
+  description: Access Salesforce platform AI (Models/Agentforce) APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: einstein_gpt_api
+  description: Access Einstein GPT APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: mcp_api
+  description: Access the Salesforce platform MCP API surface. Advertised by the portal
+    discovery document; no MCP endpoint on either portal host answered anonymously.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_api
+  description: Access Data Cloud (CDP) APIs.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_ingest_api
+  description: Ingest records into Data Cloud.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_query_api
+  description: Query Data Cloud.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_profile_api
+  description: Read Data Cloud unified profiles.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_segment_api
+  description: Manage Data Cloud segments.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_identityresolution_api
+  description: Run Data Cloud identity resolution.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: cdp_calculated_insight_api
+  description: Read Data Cloud calculated insights.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: data_cloud_user_claims
+  description: Include Data Cloud user claims in the token.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: user_registration_api
+  description: Self-registration API for portal users.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: pwdless_login_api
+  description: Passwordless login API for portal users.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+- scope: forgot_password
+  description: Forgot-password API for portal users.
+  schemes: [salesforce-experience-cloud]
+  sources: [well-known/blue-origin-payloads-openid-configuration.json]
+x-evidence:
+  fetched: '2026-08-02'
+  http_status: 200
+  shop_scopes: 4
+  salesforce_scopes: 35

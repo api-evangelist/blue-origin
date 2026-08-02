@@ -1,0 +1,91 @@
+generated: '2026-08-02'
+method: probed
+source: live /.well-known/openid-configuration + /.well-known/oauth-authorization-server
+  + /.well-known/oauth-protected-resource probes on Blue Origin hosts
+note: >-
+  Blue Origin publishes no OpenAPI, no developer portal and no authentication
+  documentation, so nothing here is derived from a spec — every scheme below was read
+  from a discovery document the host served anonymously. Three distinct identity
+  surfaces exist, none of them Blue Origin-built: a Shopify customer-account
+  authorization server behind the Blue Origin Shop, and one Salesforce Experience Cloud
+  identity provider fronting each of the two customer/data portals (both portals sit on
+  the same Salesforce org, 00D8Y0000008AXY). The MCP server at shop.blueorigin.com/api/mcp
+  needs no credential for tools/list, search_catalog, get_product_details, get_cart,
+  update_cart or search_shop_policies_and_faqs; only checkout requires buyer identity
+  and contemporaneous approval.
+summary:
+  types: [oauth2, openIdConnect, none]
+  api_key_in: []
+  oauth2_flows: [authorizationCode, refreshToken, jwtBearer, implicit]
+  unauthenticated_surfaces:
+  - https://shop.blueorigin.com/api/mcp (tools/list and read tools)
+  - https://shop.blueorigin.com/products.json
+  - https://payloads.blueorigin.com/services/data (version list only)
+  - https://bodp.blueorigin.com/services/data (version list only)
+schemes:
+- name: shopify-customer-account
+  type: openIdConnect
+  source: well-known/blue-origin-shop-openid-configuration.json
+  openIdConnectUrl: https://shop.blueorigin.com/.well-known/openid-configuration
+  issuer: https://shopify.com/authentication/30100881545
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://shopify.com/authentication/30100881545/oauth/authorize
+    tokenUrl: https://shopify.com/authentication/30100881545/oauth/token
+    pkce: [S256]
+  grant_types: [authorization_code, refresh_token, 'urn:ietf:params:oauth:grant-type:jwt-bearer']
+  token_endpoint_auth_methods: [client_secret_basic]
+  id_token_signing_alg: [RS256]
+  jwks_uri: https://shopify.com/authentication/30100881545/.well-known/jwks.json
+  end_session_endpoint: https://shopify.com/authentication/30100881545/logout
+  protected_resource:
+    metadata: well-known/blue-origin-shop-oauth-protected-resource.json
+    rfc: RFC 9728
+    resource: https://shop.blueorigin.com
+    authorization_servers: [https://shopify.com/authentication/30100881545]
+    bearer_methods_supported: [header]
+- name: salesforce-payloads-portal
+  type: openIdConnect
+  source: well-known/blue-origin-payloads-openid-configuration.json
+  openIdConnectUrl: https://payloads.blueorigin.com/.well-known/openid-configuration
+  issuer: https://payloads.blueorigin.com
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://payloads.blueorigin.com/services/oauth2/authorize
+    tokenUrl: https://payloads.blueorigin.com/services/oauth2/token
+  - flow: implicit
+    authorizationUrl: https://payloads.blueorigin.com/services/oauth2/authorize
+    note: response_types_supported includes token and token id_token
+  token_endpoint_auth_methods: [client_secret_post, client_secret_basic, private_key_jwt]
+  id_token_signing_alg: [RS256]
+  jwks_uri: https://payloads.blueorigin.com/id/keys
+  userinfo_endpoint: https://payloads.blueorigin.com/services/oauth2/userinfo
+  introspection_endpoint: https://payloads.blueorigin.com/services/oauth2/introspect
+  revocation_endpoint: https://payloads.blueorigin.com/services/oauth2/revoke
+  registration_endpoint: https://payloads.blueorigin.com/services/oauth2/register
+  end_session_endpoint: https://payloads.blueorigin.com/services/auth/idp/oidc/logout
+- name: salesforce-bodp-portal
+  type: openIdConnect
+  source: well-known/blue-origin-bodp-openid-configuration.json
+  openIdConnectUrl: https://bodp.blueorigin.com/.well-known/openid-configuration
+  issuer: https://bodp.blueorigin.com
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://bodp.blueorigin.com/services/oauth2/authorize
+    tokenUrl: https://bodp.blueorigin.com/services/oauth2/token
+  token_endpoint_auth_methods: [client_secret_post, client_secret_basic, private_key_jwt]
+  id_token_signing_alg: [RS256]
+  jwks_uri: https://bodp.blueorigin.com/id/keys
+  end_session_endpoint: https://bodp.blueorigin.com/services/auth/idp/oidc/logout
+observed_auth_errors:
+- surface: https://payloads.blueorigin.com/services/oauth2/userinfo
+  http_status: 403
+  body: Missing_OAuth_Token
+- surface: https://payloads.blueorigin.com/openapi.json
+  http_status: 401
+- surface: https://bodp.blueorigin.com/openapi.json
+  http_status: 401
+x-evidence:
+  fetched: '2026-08-02'
+  discovery_documents: 3
+  http_status: 200

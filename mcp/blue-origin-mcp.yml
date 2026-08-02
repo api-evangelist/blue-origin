@@ -1,0 +1,99 @@
+generated: '2026-08-02'
+method: searched
+source: https://shop.blueorigin.com/api/mcp
+status: published
+note: >-
+  Blue Origin ships no MCP server for any of its space, launch or payload products. The
+  one live MCP endpoint on a blueorigin.com host belongs to the Blue Origin Shop, its
+  Shopify storefront, and is Shopify's platform agentic-commerce server bound to Blue
+  Origin's store. It answers tools/list anonymously (no OAuth challenge) and returns
+  five tools with complete JSON Schema draft 2020-12 input schemas — the verbatim
+  response is stored alongside this manifest. The store's llms.txt additionally
+  advertises a UCP transport at /api/ucp/mcp, but that endpoint requires a UCP agent
+  profile URI and returned JSON-RPC error -32001 (invalid_profile_url, HTTP 422) to an
+  anonymous tools/list.
+server:
+  name: blue-origin-shop
+  transport: http
+  url: https://shop.blueorigin.com/api/mcp
+  auth: none required for tools/list; checkout requires contemporaneous buyer approval
+  platform: Shopify storefront MCP
+  rate_limited: true
+  rate_limit_note: per-IP rate limiting; back off on HTTP 429 (documented in llms.txt)
+  tools_file: blue-origin-shop-mcp-tools.json
+alternate_endpoints:
+- url: https://shop.blueorigin.com/api/ucp/mcp
+  transport: http
+  protocol: Universal Commerce Protocol 2026-04-08
+  status: gated
+  http_status: 422
+  error: 'jsonrpc -32001 UCP discovery failed / invalid_profile_url — requires meta.ucp-agent.profile URI'
+- url: https://blue-origin-store.myshopify.com/api/ucp/mcp
+  transport: http
+  protocol: Universal Commerce Protocol 2026-04-08
+  status: gated
+  http_status: 422
+  note: canonical myshopify host advertised by /.well-known/ucp; same profile requirement
+tools:
+- name: search_catalog
+  description: >-
+    Search for products from the online store. Accepts natural-language queries, filter
+    criteria, or both; at least one of query or filters must be provided. Results are
+    paginated via pagination.cursor. Conforms to the UCP catalog-search capability
+    (dev.ucp.shopping.catalog.search).
+  input_properties: [meta, catalog]
+  required: []
+- name: get_product_details
+  description: >-
+    Look up a product by ID. Pass options to select a specific variant for the product
+    card; without options the first available variant is returned. Supports country and
+    language localisation.
+  input_properties: [product_id, options, country, language]
+  required: [product_id]
+- name: get_cart
+  description: >-
+    Get a cart including line items, shipping options, discount info and the checkout
+    URL for a given cart id (gid://shopify/Cart/...).
+  input_properties: [cart_id]
+  required: [cart_id]
+- name: update_cart
+  description: >-
+    Consolidated cart mutation — add, update or remove line items, set buyer identity
+    and delivery addresses, select delivery options, apply discount and gift-card codes,
+    and set a cart note. Omitting cart_id creates a new cart, in which case add_items is
+    required. Shipping options become available once items and a delivery address exist.
+  input_properties: [cart_id, add_items, update_items, remove_line_ids, buyer_identity,
+    delivery_addresses_to_add, delivery_addresses_to_replace, selected_delivery_options,
+    discount_codes, gift_card_codes, note]
+  required: []
+- name: search_shop_policies_and_faqs
+  description: >-
+    Retrieve facts about the store's policies, products or services from a natural
+    language question (return policy, shipping policy, contact details, hours).
+  input_properties: [query, context]
+  required: [query]
+ucp:
+  version: '2026-04-08'
+  supported_versions: ['2026-04-08', '2026-01-23']
+  discovery: https://shop.blueorigin.com/.well-known/ucp
+  profile_file: ../well-known/blue-origin-shop-ucp.json
+  capabilities:
+  - dev.ucp.shopping.catalog.search
+  - dev.ucp.shopping.catalog.lookup
+  - dev.ucp.shopping.cart
+  - dev.ucp.shopping.checkout
+  - dev.ucp.shopping.fulfillment
+  - dev.ucp.shopping.discount
+  - dev.ucp.shopping.order
+  - dev.shopify.catalog
+  payment_handlers:
+  - com.google.pay
+  - dev.shopify.card
+  - dev.shopify.shop_pay
+x-evidence:
+  fetched: '2026-08-02'
+  method_called: tools/list
+  url: https://shop.blueorigin.com/api/mcp
+  http_status: 200
+  content_type: application/json
+  tools_returned: 5

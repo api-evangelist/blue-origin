@@ -1,0 +1,18 @@
+generated: '2026-08-02'
+method: generated
+source: mcp/blue-origin-mcp.yml (live tools/list at https://shop.blueorigin.com/api/mcp)
+note: >-
+  Blue Origin publishes no OpenAPI, so these skills are grounded in the real MCP tool
+  names and input schemas returned by tools/list on 2026-08-02 rather than in operationIds.
+  Every tool named below exists verbatim in mcp/blue-origin-shop-mcp-tools.json. Blue
+  Origin publishes no AGENTS.md or skill files of its own for its space products; the
+  storefront's agents.md is captured verbatim at llms/blue-origin-shop-agents.md.
+skills:
+- file: blue-origin-shop-find-products.md
+  name: Find Blue Origin Shop products and answer store questions
+  api: mcp/blue-origin-mcp.yml
+  operations: [search_catalog, get_product_details, search_shop_policies_and_faqs]
+- file: blue-origin-shop-build-cart-and-checkout.md
+  name: Build a Blue Origin Shop cart and hand off to buyer-approved checkout
+  api: mcp/blue-origin-mcp.yml
+  operations: [search_catalog, get_product_details, update_cart, get_cart]
