@@ -32,6 +32,18 @@ tags:
 - Rocket Engines
 - Defense
 - Manufacturing
+- E-Commerce
+- MCP
+tags_raw:
+- Company
+- Aerospace
+- Space
+- Spaceflight
+- Launch Services
+- Satellites
+- Rocket Engines
+- Defense
+- Manufacturing
 - E-commerce
 - MCP
 apis:
@@ -73,6 +85,11 @@ apis:
   tags:
   - Commerce
   - Catalog
+  - Product
+  - JSON
+  tags_raw:
+  - Commerce
+  - Catalog
   - Products
   - JSON
   properties:
@@ -95,6 +112,11 @@ apis:
   - Payloads
   - Customer Portal
   - Salesforce
+  - Authentication
+  tags_raw:
+  - Payloads
+  - Customer Portal
+  - Salesforce
   - OAuth
   properties:
   - type: OpenIDConnect
@@ -112,6 +134,10 @@ apis:
   humanURL: https://bodp.blueorigin.com/
   baseURL: https://bodp.blueorigin.com/services/data/v67.0
   tags:
+  - Data Portal
+  - Salesforce
+  - Authentication
+  tags_raw:
   - Data Portal
   - Salesforce
   - OAuth
