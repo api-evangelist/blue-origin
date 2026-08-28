@@ -15,6 +15,17 @@ description: 'Blue Origin is an American private aerospace manufacturer and spac
   and an anonymous MCP server at /api/mcp exposing five tools. The corporate site itself
   sits behind a Vercel Security Checkpoint that answers HTTP 429 to every non-browser
   request, including /robots.txt.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://shop.blueorigin.com/cdn/shop/files/shoplogo_28118316-c90f-44eb-b740-03b5c523988d.png?v=1645467696
 url: https://raw.githubusercontent.com/api-evangelist/blue-origin/refs/heads/main/apis.yml
 x-type: company
