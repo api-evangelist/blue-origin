@@ -97,6 +97,9 @@ apis:
     url: llms/blue-origin-shop-llms.txt
   - type: x-evidence
     url: https://shop.blueorigin.com/api/mcp
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-mcp
 - name: Blue Origin Shop Storefront JSON
   description: 'The read-only JSON surface of the Blue Origin Shop Shopify storefront,
     documented by the store''s own llms.txt/agents.md: GET /products.json and GET /collections/{handle}/products.json
@@ -122,6 +125,9 @@ apis:
     url: well-known/blue-origin-well-known.yml
   - type: x-evidence
     url: https://shop.blueorigin.com/products.json
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-json
 - name: Blue Origin Customer Portal (Payloads) Platform API
   description: 'payloads.blueorigin.com is Blue Origin''s customer portal for payload
     customers, running on Salesforce Experience Cloud. Blue Origin publishes no documentation
