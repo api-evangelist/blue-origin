@@ -2,6 +2,13 @@
   "repo": "blue-origin",
   "feeds": [
     {
+      "source": "https://www.blueorigin.com/news",
+      "feed_url": "https://www.blueorigin.com/news",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
       "source": "https://github.com/BlueOrigin",
       "feed_url": "https://github.com/BlueOrigin",
       "title": "",
@@ -10,5 +17,5 @@
     }
   ],
   "post_count": 0,
-  "fetched": "2026-10-03T12:30:02Z"
+  "fetched": "2026-10-10T13:15:00Z"
 }
