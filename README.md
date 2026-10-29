@@ -64,26 +64,104 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Blue Origin is an American private aerospace manufacturer and spaceflight services company founded
-in 2000 by Jeff Bezos and headquartered in Kent, Washington — New Shepard, New Glenn, the BE-3 and
-BE-4 engines, Blue Moon and Blue Ring.
+Blue Origin is an American private aerospace manufacturer and spaceflight services company founded in 2000 by Jeff Bezos and headquartered in Kent, Washington. It builds and flies the reusable New Shepard suborbital vehicle, the heavy-lift New Glenn orbital launch vehicle, the BE-3 and BE-4 rocket engines, the Blue Moon lunar lander and the Blue Ring orbital transfer vehicle, and it owns Honeybee Robotics. Blue Origin publishes no public developer portal, no API documentation and no machine-readable API description for any of its space products; customer, payload and supplier relationships run through authenticated portals — payloads.blueorigin.com and bodp.blueorigin.com on Salesforce Experience Cloud, and supplierportal.blueorigin.com on AWS GovCloud. The only genuinely agent-addressable surface on a blueorigin.com host is the Blue Origin Shop, a Shopify storefront that publishes a real llms.txt and agents.md, a Universal Commerce Protocol (UCP) merchant profile, RFC 9728 protected-resource metadata, and an anonymous MCP server at /api/mcp exposing five tools. The corporate site itself sits behind a Vercel Security Checkpoint that answers HTTP 429 to every non-browser request, including /robots.txt.
 
-**Blue Origin publishes no public API for any of its space products.** There is no developer
-portal, no API documentation and no OpenAPI, AsyncAPI or A2A agent card on any `blueorigin.com`
-host. Customer, payload and supplier relationships run through login-walled portals.
+**Areas:** Company · Aerospace · Space · Spaceflight · Launch Services · Satellite · Rocket Engines · Defense · Manufacturing · E-Commerce · MCP
 
-The one genuinely agent-addressable surface is the **Blue Origin Shop** (`shop.blueorigin.com`), a
-Shopify storefront that serves a real `llms.txt` and `agents.md`, a Universal Commerce Protocol
-merchant profile, RFC 9728 protected-resource metadata, and an **anonymous MCP server at
-`/api/mcp` with five tools**.
+## Blue Origin on APIs.io
 
-The corporate site sits behind a Vercel Security Checkpoint that answers **HTTP 429 to every
-non-browser request, `/robots.txt` included** — agents cannot read `www.blueorigin.com` at all.
+Everything profiled for Blue Origin is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/blue-origin/](https://apis.io/providers/blue-origin/)** — or go straight to one of the APIs or properties below.
 
-- Website: https://www.blueorigin.com/
-- Shop (agent surface): https://shop.blueorigin.com/agents.md
-- Secondary market: https://www.hiive.com/securities/blue-origin-stock
+### APIs (4)
 
-See [`apis.yml`](apis.yml) for the full APIs.json record and
-[`well-known/blue-origin-well-known.yml`](well-known/blue-origin-well-known.yml) for the complete
-probe matrix across all seven hosts.
+- [Blue Origin Shop MCP Server](https://apis.io/apis/blue-origin/blue-origin-shop-mcp-server/) — The Blue Origin Shop storefront exposes an anonymous Model Context Protocol endpoint at https://shop.blueorigin.com/api/mcp. A live tools/list returned five…
+- [Blue Origin Shop Storefront JSON](https://apis.io/apis/blue-origin/blue-origin-shop-storefront-json/) — The read-only JSON surface of the Blue Origin Shop Shopify storefront, documented by the store's own llms.txt/agents.md: GET /products.json and GET…
+- [Blue Origin Customer Portal (Payloads) Platform API](https://apis.io/apis/blue-origin/blue-origin-customer-portal-payloads-platform-api/) — payloads.blueorigin.com is Blue Origin's customer portal for payload customers, running on Salesforce Experience Cloud. Blue Origin publishes no…
+- [Blue Origin Data Portal (BODP) Platform API](https://apis.io/apis/blue-origin/blue-origin-data-portal-bodp-platform-api/) — bodp.blueorigin.com is the Blue Origin Data Portal, a second Salesforce Experience Cloud community on the same Salesforce org as the payloads customer…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [blue-origin-shop](https://apis.io/servers/blue-origin/blue-origin-shop/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Blue Origin Authentication](https://apis.io/security/blue-origin/blue-origin-authentication/)
+- [Blue Origin Domain Security](https://apis.io/security/blue-origin/blue-origin-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Blue Origin Scopes](https://apis.io/scopes/blue-origin/blue-origin-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.blueorigin.com/)
+- [Sign up](https://shop.blueorigin.com/account/register)
+- [Blog](https://www.blueorigin.com/news)
+- [Terms of service](https://www.blueorigin.com/terms-of-use)
+- [Privacy policy](https://www.blueorigin.com/privacy-policy)
+- [GitHub](https://github.com/BlueOrigin)
+
+## API Evangelist rating
+
+**Kin Score 20.5** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 80.0 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 14.9 |
+| Access clarity | 23.7 |
+
+**Agent readiness 21.2** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | platform (partial credit) |
+
+**Regulatory alignment 30.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/blue-origin/](https://apis.io/providers/blue-origin/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Blue Origin: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/blue-origin/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
